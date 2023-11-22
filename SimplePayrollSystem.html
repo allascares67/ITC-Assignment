@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payroll System</title>
+    <style>
+
+        body
+        {
+          font-family: Arial, sans-serif;
+        }
+        table 
+
+        {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        th, td 
+        {
+            border: 1px solid #000000;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th 
+        {
+            background-color: #dfef02;
+        }
+
+        button 
+        {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Payroll System</h2>
+    <label for="employeeName">Employee Name:</label>
+    <input type="text" id="employeeName">
+
+    <label for="daysWorked">Days Worked:</label>
+    <input type="text" id="daysWorked">
+
+    <label for="dailyRate">Daily Rate:</label>
+    <input type="text" id="dailyRate">
+
+    <label for="deductionAmount">Deduction Amount:</label>
+    <input type="text" id="deductionAmount">
+
+    <button onclick="addEmployee()">Add Employee</button>
+    <button onclick="deleteEmployee()">Delete Employee</button>
+
+    <table id="payrollTable">
+        <tr>
+            <th>No.</th>
+            <th>Employee Name</th>
+            <th>Days Worked</th>
+            <th>Daily Rate</th>
+            <th>Gross Pay</th>
+            <th>Deduction Amount</th>
+            <th>Net Pay</th>
+        </tr>
+    </table>
+
+    <script>
+        let payrollList = [];
+
+        function addEmployee() 
+        {
+            const employeeName = document.getElementById('employeeName').value;
+            const daysWorked = parseInt(document.getElementById('daysWorked').value);
+            const dailyRate = parseFloat(document.getElementById('dailyRate').value);
+            const deductionAmount = parseFloat(document.getElementById('deductionAmount').value);
+
+            const grossPay = daysWorked * dailyRate;
+            const netPay = grossPay - deductionAmount;
+
+            const employee = {
+                employeeName: employeeName,
+                daysWorked: daysWorked,
+                dailyRate: dailyRate,
+                grossPay: grossPay,
+                deductionAmount: deductionAmount,
+                netPay: netPay
+            };
+
+            payrollList.push(employee);
+            updateTable();
+        }
+
+        function deleteEmployee() 
+        {
+            const lineNumber = prompt("Enter Line Number To Delete:");
+
+            if (lineNumber && !isNaN(lineNumber) && lineNumber > 0 && lineNumber <= payrollList.length) {
+                payrollList.splice(lineNumber - 1, 1);
+                updateTable();
+            } else {
+                alert("Invalid Line Number, please input an existing line number.");
+            }
+        }
+
+        function updateTable() 
+        {
+            const table = document.getElementById('payrollTable');
+            table.innerHTML = "<tr><th>No.</th><th>Employee Name</th><th>Days Worked</th><th>Daily Rate</th><th>Gross Pay</th><th>Deduction Amount</th><th>Net Pay</th></tr>";
+
+            payrollList.forEach((employee, index) => {
+                const row = table.insertRow(-1);
+                const cell1 = row.insertCell(0);
+                const cell2 = row.insertCell(1);
+                const cell3 = row.insertCell(2);
+                const cell4 = row.insertCell(3);
+                const cell5 = row.insertCell(4);
+                const cell6 = row.insertCell(5);
+                const cell7 = row.insertCell(6);
+
+                cell1.textContent = index + 1;
+                cell2.textContent = employee.employeeName;
+                cell3.textContent = employee.daysWorked;
+                cell4.textContent = employee.dailyRate;
+                cell5.textContent = employee.grossPay;
+                cell6.textContent = employee.deductionAmount;
+                cell7.textContent = employee.netPay;
+            });
+        }
+    </script>
+    <p><a href="amain.html">Back to Home Page</a></p>
+    <br><br>
+    <div id="result"></div>
+</body>
+</html>

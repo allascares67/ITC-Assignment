@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Income Tax Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="calculator">
+        <h2>Income Tax Calculator</h2>
+        <label for="income">Taxable Income:</label>
+        <input type="number" id="income" placeholder="Enter taxable income" required>
+
+        <button onclick="calculateTax()">Calculate Tax</button>
+
+        <p id="result"></p>
+    </div>
+
+    <script>
+        function calculateTax() {
+            var income = parseFloat(document.getElementById('income').value);
+
+            if (isNaN(income)) {
+                alert("Please enter a valid number for taxable income.");
+                return;
+            }
+            var basicTax = 0;
+            var rate = 0;
+            if (income <= 250000) {
+                rate = 0;
+            } else if (income > 250000 && income <= 400000) {
+                basicTax = 250000;
+                rate = 0.2;
+            } else if (income > 400000 && income <= 800000) {
+                basicTax = 30000;
+                rate = 0.25;
+            } else if (income > 800000 && income <= 2000000) {
+                basicTax = 130000;
+                rate = 0.3;
+            } else if (income > 2000000 && income <= 8000000) {
+                basicTax = 490000;
+                rate = 0.32;
+            } else if (income > 8000000) {
+                basicTax = 2410000;
+                rate = 0.35;
+            }
+            var incomeTax = basicTax + (income * rate);
+            document.getElementById('result').innerHTML = "Income Tax: $" + incomeTax.toFixed(2);
+        }
+    </script>
+  <p><a href="amain.html">Back to Home Page</a></p>
+  <br><br>
+  <div id="result"></div>
+</body>
+</html>
