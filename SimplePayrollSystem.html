@@ -5,33 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Payroll System</title>
     <style>
-
-        body
-        {
-          font-family: Arial, sans-serif;
+        body {
+            font-family: Arial, sans-serif;
         }
-        table 
 
-        {
+        table {
             border-collapse: collapse;
             width: 100%;
             margin-top: 20px;
         }
 
-        th, td 
-        {
+        th, td {
             border: 1px solid #000000;
             text-align: left;
             padding: 8px;
         }
 
-        th 
-        {
+        th {
             background-color: #dfef02;
         }
 
-        button 
-        {
+        button {
             margin-top: 10px;
         }
     </style>
@@ -51,7 +45,18 @@
     <input type="text" id="deductionAmount">
 
     <button onclick="addEmployee()">Add Employee</button>
-    <button onclick="deleteEmployee()">Delete Employee</button>
+
+    <label class="inputline" for="delitem">Delete Employee:</label>
+    <input id="delitem" type="number">
+    <button id="btndelete">Delete</button>
+
+    <dialog id="dlgConfirmDelete">
+        <form method="dialog">
+            <h4 id="dlgmsg">Delete the item?</h4>
+            <button id="btnConfirmDelete" value="confirm">Confirm</button>
+            <button id="btnCancelDelete" value="cancel">Cancel</button>
+        </form>
+    </dialog>
 
     <table id="payrollTable">
         <tr>
@@ -68,8 +73,7 @@
     <script>
         let payrollList = [];
 
-        function addEmployee() 
-        {
+        function addEmployee() {
             const employeeName = document.getElementById('employeeName').value;
             const daysWorked = parseInt(document.getElementById('daysWorked').value);
             const dailyRate = parseFloat(document.getElementById('dailyRate').value);
@@ -91,20 +95,33 @@
             updateTable();
         }
 
-        function deleteEmployee() 
-        {
-            const lineNumber = prompt("Enter Line Number To Delete:");
+        document.getElementById("btndelete").addEventListener("click", () => {
+            var x, l;
+            l = payrollList.length;
 
-            if (lineNumber && !isNaN(lineNumber) && lineNumber > 0 && lineNumber <= payrollList.length) {
-                payrollList.splice(lineNumber - 1, 1);
-                updateTable();
-            } else {
-                alert("Invalid Line Number, please input an existing line number.");
+            x = document.getElementById("delitem").value * 1;
+            --x;
+
+            if (x >= 0 && x < l) {
+                document.getElementById("dlgmsg").innerHTML = "Delete Employee?";
+                dlgConfirmDelete.showModal();
             }
-        }
+        });
 
-        function updateTable() 
-        {
+        document.getElementById("btnConfirmDelete").addEventListener("click", () => {
+            var x = document.getElementById("delitem").value * 1 - 1;
+            payrollList.splice(x, 1);
+            updateTable();
+            document.getElementById("delitem").value = '';
+            dlgConfirmDelete.close();
+        });
+
+        document.getElementById("btnCancelDelete").addEventListener("click", () => {
+            document.getElementById("delitem").value = '';
+            dlgConfirmDelete.close();
+        });
+
+        function updateTable() {
             const table = document.getElementById('payrollTable');
             table.innerHTML = "<tr><th>No.</th><th>Employee Name</th><th>Days Worked</th><th>Daily Rate</th><th>Gross Pay</th><th>Deduction Amount</th><th>Net Pay</th></tr>";
 
@@ -128,6 +145,7 @@
             });
         }
     </script>
+
     <p><a href="amain.html">Back to Home Page</a></p>
     <br><br>
     <div id="result"></div>
